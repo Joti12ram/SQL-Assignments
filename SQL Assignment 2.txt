@@ -1,0 +1,121 @@
+use employeedb;
+create table employeeTable(
+empd_id int primary key, 
+emp_name varchar(30), 
+salary bigint, 
+joining_date date,
+empCity varchar(40), 
+department varchar(80),
+dept_id int,
+total_employee int);
+
+insert into employeetable values(101, 'Kiran Raundal', 400000, '2025/04/30', 'Pune', 'Sales', 3, 5);
+insert into employeetable values(102, 'Abhishekh Sharma', 800000, '2025-03-20', 'Mumbai', 'Hr', 1, 4);
+insert into employeetable values(103, 'Jotiram Mane', 100000, '2024-02-20', 'Banglore', 'QA', 2, 6);
+insert into employeetable values(104, 'Aakash Patil', 300000, '2025-04-25', 'Delhi', 'Finance', 1,7);
+insert into employeetable values(105, 'Suyog Wagh', 600000, '2024-06-13', 'Pune', 'Devops', 4, 8); 
+
+-- 1.Display the total salary paid in each department.
+select department, sum(salary) as total_salary
+from employeetable group by department;
+
+-- 2.Find the departments that have more than 2 employees.
+select department, count(*) as employee_count
+from employeetable group by department 
+having count(*)>2;
+
+-- 3.List the names of employees earning the highest salary in their respective departments.
+select emp_name, department, salary from employeetable e
+where salary=(select max(salary) from employeetable
+where department= e.department);
+
+insert into employeetable(empd_id, emp_name, salary, joining_date, empCity, total_employee)
+values(106, 'Suraj Powar', 700000, '2024-05-21', 'Nagpur', 8);
+
+-- 4.Show the details of employees who do not belong to any department.
+select * from employeetable 
+where department is null;
+
+create table department1(
+dept_name varchar(80), dept_id int);
+select * from department1;
+insert into department1(dept_name, dept_id)
+values('Sales', 01),
+('Hr', 02), ('QA', 03), ('Finance', 04), ('Devops', 05);
+
+
+-- 5.Display the names of employees working in the 'HR' department using a JOIN.
+select e.emp_name from employeetable e 
+join department1 d on e.dept_id=d.dept_id 
+where d.dept_name='Hr';
+
+select * from department1;
+insert into department1(dept_name, employee_count)
+values('Sales', 5), ('Hr',0), ('QA',4), ('Finance',0), ('Devops',7);
+alter table department1 add column employee_count int;
+-- 6.List all departments along with the number of employees in each (including departments with zero employees).
+select dept_id, count(*) as total_employee 
+from employeetable group by dept_id;
+
+
+-- 7.Find the second highest salary in the employee table.
+select max(salary) as second_highest_salary from employeetable
+where salary<(select max(salary) from employeetable);
+
+-- 8.Display the names of employees whose salary is greater than the average salary.
+select emp_name from employeetable
+where salary>(select avg(salary)
+from employeetable);
+
+-- 9.List department names that do not have any employees assigned.
+select distinct empd_id, emp_name 
+from employeetable where dept_id is null;
+
+-- 10.Show the names and salaries of employees who share the same salary with others.
+select emp_name, salary from employeetable
+where salary in(select salary from employeetable 
+group by salary having count(*)>1);
+
+-- 11.Find the department with the maximum total salary expense.
+select dept_id, sum(salary) as total_salary from employeetable
+group by dept_id having sum(salary)=(select max(total_dept_salary)
+from(select dept_id, sum(salary) as total_dept_salary
+from employeetable group by dept_id)
+as dept_totals);
+
+-- 12.List all employee names with their department names, including employees with no department.
+select emp_name, department from employeetable
+where department is null;
+
+-- 13.Count how many employees joined in each year.
+select year(joining_date)as join_year, count(*) as total_employee
+from employeetable group by year(joining_date) 
+order by join_year;
+
+-- 14.Display department-wise average salary where the average salary is greater than ₹50,000.
+select dept_id, avg(salary) as avg_salary
+from employeetable group by dept_id
+having avg(salary)>50000;
+
+-- 15.Find employees whose names start with a vowel.
+select * from employeetable 
+where emp_name like 'A%' or emp_name like 'E%'
+or emp_name like 'I%' or emp_name like 'O%' or emp_name like 'U%';
+
+-- 16.Show the number of employees in each department sorted in descending order of employee count.
+select dept_id, count(*) as total_employee 
+from employeetable group by dept_id 
+order by total_employee desc;
+
+-- 17.Write a query to delete all employees who joined before the year 2020 (using transaction logic).
+delete from employeetable 
+where joining_date <'2020-01-01';
+
+-- 18.Insert a new department and two employees under it using transaction commands.
+insert into employeetable(empd_id, emp_name, salary, joining_date, empCity, department, dept_id, total_employee)
+values(107, 'Vidit Torase', 500000, '2024-05-21', 'Kota', 'AI Research', 5, 10),
+(108, 'Amol Patil', 1200000, '2024-03-14', 'Chennai', 'AI Research', 2, 7);
+
+-- 19.List all unique department IDs present in the employee table.
+select distinct dept_id from employeetable
+where dept_id is not null;
