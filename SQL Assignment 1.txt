@@ -1,0 +1,80 @@
+use employeedb;
+create table employeeTable1(
+empd_id int primary key, 
+emp_name varchar(30), 
+salary bigint, 
+joining_date date,
+empCity varchar(40)); 
+
+insert into employeetable1 values(101, 'Kiran Raundal', 400000, '2025/04/30', 'Nagpur');
+insert into employeetable1 values(102, 'Abhishekh Sharma', 800000, '2025-03-20', 'Mumbai');
+insert into employeetable1 values(103, 'Jotiram Mane', 100000, '2024-02-20', 'Banglore');
+insert into employeetable1 values(104, 'Aakash Patil', 300000, '2025-04-25', 'Delhi');
+insert into employeetable1 values(105, 'Suyog Wagh', 600000, '2024-06-13', 'Pune');
+
+select * from employeetable1;
+
+-- 1.Fetch all employees with a salary greater than 500000.
+select * from employeetable1 
+where salary>500000;
+
+-- 2.Display employee records in descending order of salary.
+select * from employeetable1 order by salary desc;
+
+-- 3.Display employee names starting with the letter 'A'.
+select emp_name from employeetable1 
+where emp_name like 'A%';
+
+-- 4.Update the salary of employee with emp_id = 103 to 1200000.
+Update employeetable1
+set salary='1200000'
+where empd_id='103';
+
+-- 5.Count how many employees are in the table.
+select count(*) as total_employees 
+from employeetable1;
+
+-- 6.Calculate the total salary of all employees.
+select sum(salary) as total_salary 
+from employeetable1;
+
+-- 7.Find the average salary of employees.
+select avg(salary) as average_salary 
+from employeetable1;
+
+-- 8.Find the highest and lowest salaries.
+select max(salary) as highest_salary,
+min(salary) as lowest_salary
+from employeetable1;
+
+-- 9.Display details of employees who joined after '2025-03-20'.
+select * from employeetable1 
+where joining_date > '2025-03-20';
+
+-- 10.Rename the column name to emp_City.
+Alter table employeetable1 
+rename column empCity to employeeCity;
+
+-- 11.Write a query to fetch the top 3 highest-paid employees.
+select * from employeetable1
+order by salary desc limit 3;
+
+-- 12.Find all employees whose salary is between 30,000 and 70,000.
+select * from employeetable1 
+where salary between 300000 and 700000;
+
+select * from employeetable1;
+insert into employeetable1 values(empd_id, emp_name, salary, joining_date, employeeCity);
+insert into employeetable1 values(106, 'Vidit Torase', 800000, '2025/03/20', 'Chennai');
+
+-- 13.Delete the employee with emp_id = 106.
+delete from employeetable1 
+where empd_id=106;
+
+Alter table employeetable1 add department varchar(80);
+-- 14.Add a new column department to the employeeTable1
+Update employeetable1 set department='QA' where empd_id='101';
+Update employeetable1 set department='Devloper' where empd_id='102';
+Update employeetable1 set department='SQLDEV' where empd_id='103';
+Update employeetable1 set department='HR' where empd_id='104';
+Update employeetable1 set department='Maintainance' where empd_id='105';
